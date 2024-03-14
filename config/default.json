@@ -1,0 +1,4 @@
+{
+  "MongoURI": "mongodb+srv://uteach:hmdmb16Pux9ehC6g@uteach.jdrwhqj.mongodb.net/",
+  "jwtSecret": "jwtsecretvar"
+}

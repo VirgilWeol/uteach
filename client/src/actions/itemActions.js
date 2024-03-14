@@ -1,0 +1,53 @@
+import { GET_ITEM, ADD_ITEM, DELETE_ITEM, ITEM_LOADING } from './types';
+import { tokenconfig } from './authactions';
+import { returnErrors } from './erroractions';
+import api from '../utils/api';
+
+export const getItem = () => (dispatch) => {
+  dispatch(itemLoading());
+  api
+    .get('/api/items')
+    .then((res) =>
+      dispatch({
+        type: GET_ITEM,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const deleteItem = (_id) => (dispatch, getState) => {
+  api
+    .delete(`/api/items/items/${_id}`, tokenconfig(getState))
+    .then((res) =>
+      dispatch({
+        type: DELETE_ITEM,
+        payload: _id
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const addItem = (item) => (dispatch, getState) => {
+  api
+    .post('/api/items/items', item, tokenconfig(getState))
+    .then((res) =>
+      dispatch({
+        type: ADD_ITEM,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const itemLoading = () => {
+  return {
+    type: ITEM_LOADING
+  };
+};
