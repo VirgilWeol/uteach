@@ -18,9 +18,24 @@ export const getItem = () => (dispatch) => {
     );
 };
 
+export const getItemBySubject = (subject) => (dispatch) => {
+  dispatch(itemLoading());
+  api
+    .get(`/api/items/subject/${subject}`)
+    .then((res) =>
+      dispatch({
+        type: GET_ITEM,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
 export const deleteItem = (_id) => (dispatch, getState) => {
   api
-    .delete(`/api/items/items/${_id}`, tokenconfig(getState))
+    .delete(`/api/items/${_id}`, tokenconfig(getState))
     .then((res) =>
       dispatch({
         type: DELETE_ITEM,
@@ -33,8 +48,9 @@ export const deleteItem = (_id) => (dispatch, getState) => {
 };
 
 export const addItem = (item) => (dispatch, getState) => {
+  dispatch(itemLoading());
   api
-    .post('/api/items/items', item, tokenconfig(getState))
+    .post('/api/items', item, tokenconfig(getState))
     .then((res) =>
       dispatch({
         type: ADD_ITEM,

@@ -24,11 +24,13 @@ const ItemSchema = new schema({
   },
   price: {
     type: Number,
-    required: true
+    required: true,
+    default: 10000
   },
   rating: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   description: {
     type: String,
@@ -43,6 +45,18 @@ const ItemSchema = new schema({
     required: true
   },
   address: {
+    type: String,
+    required: true
+  },
+  gpa: {
+    type: String,
+    required: true
+  },
+  skills: {
+    type: String,
+    required: true
+  },
+  certificate: {
     type: String,
     required: true
   }

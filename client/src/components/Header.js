@@ -8,7 +8,7 @@ import {
   HiBars3
 } from 'react-icons/hi2';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../actions/authactions';
+import { changeRole, logout } from '../actions/authactions';
 
 function Header() {
   const auth = useSelector((state) => state.auth);
@@ -24,8 +24,42 @@ function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleMentorMode = () => {
+    // if (auth.user.role === 'mentor') {
+    //   if (auth.user.activeRole === 'user') {
+    //     dispatch(changeRole('mentor'));
+    //     navigate('/history');
+    //     console.log('mentor mode');
+    //     return;
+    //   }
+    //   if (auth.user.activeRole === 'mentor') {
+    //     dispatch(changeRole('user'));
+    //     navigate('/');
+    //     console.log('user mode');
+    //     return;
+    //   }
+    // }
+    navigate('/request-mentor');
+    if (auth.user.role === 'user') {
+      return;
+    }
+  };
+
+  const handleMentorButton = () => {
+    if (auth.user.role === 'mentor') {
+      if (auth.user.activeRole === 'user') return 'Mentor Mode';
+      return 'Student Mode';
+    }
+    if (auth.user.role === 'user') {
+      return 'Request Mentor';
+    }
+  };
+
   return (
-    <div className='relative bg-white shadow-md'>
+    <div
+      className={`relative bg-white shadow-md ${
+        auth.user.activeRole === 'mentor' && 'border-b-4 border-blue-500'
+      }`}>
       <div className='px-4 mx-auto lg:container'>
         <div className='flex items-center justify-between p-2'>
           <div>
@@ -44,9 +78,11 @@ function Header() {
                 </Link>
               </li>
             </ul>
-            <button className='flex items-center justify-center gap-1 px-4 py-2 font-medium text-white bg-blue-500 rounded-md'>
+            <button
+              className='flex items-center justify-center gap-1 px-4 py-2 font-medium text-white bg-blue-500 rounded-md'
+              onClick={() => handleMentorMode()}>
               <HiAcademicCap />
-              Mentor Mode
+              {handleMentorButton()}
             </button>
             <div className='w-8 h-8'>
               <img

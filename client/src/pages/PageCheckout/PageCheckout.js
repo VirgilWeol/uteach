@@ -25,9 +25,6 @@ export default function PageCheckout() {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  console.log('items', items);
-  console.log('user', user);
-
   const onSubmit = () => {
     const data = {
       itemId,
@@ -42,6 +39,10 @@ export default function PageCheckout() {
     console.log('data', data);
 
     dispatch(addOrder(data));
+
+    if (items.loading === false) {
+      navigate('/history');
+    }
   };
 
   return (
@@ -52,7 +53,7 @@ export default function PageCheckout() {
           <div className='flex items-center gap-2'>
             <HiAcademicCap />
             <span className='font-medium text-slate-500'>
-              {items.mentorName}
+              {items.items.find((item) => item._id === itemId).mentorName}
             </span>
           </div>
         </div>
@@ -61,8 +62,7 @@ export default function PageCheckout() {
             Description
           </h2>
           <p className='text-slate-500'>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Voluptates, eaque minima corporis possimus at quia!
+            {items.items.find((item) => item._id === itemId).description}
           </p>
         </div>
         <div className='mb-2'>

@@ -17,6 +17,24 @@ router.get('/', function (req, res) {
     .then((items) => res.json(items));
 });
 
+// @route    GET api/items/:id
+// @desc     Get An Item
+// @access   Public
+router.get('/:_id', function (req, res) {
+  Item.findById(req.params._id)
+    .then((item) => res.json(item))
+    .catch((err) => res.status(404).json({ success: false }));
+});
+
+// @route    GET api/items/subject/:subject
+// @desc     Get An Item by subject name
+// @access   Public
+router.get('/subject/:subject', function (req, res) {
+  Item.find({ subject: req.params.subject })
+    .then((item) => res.json(item))
+    .catch((err) => res.status(404).json({ success: false }));
+});
+
 // @route    POST api/items
 // @desc     Create An Item
 // @access   Private
@@ -26,13 +44,30 @@ router.post('/', auth, function (req, res) {
     subjectId: req.body.subjectId,
     mentorName: req.body.mentorName,
     subject: req.body.subject,
-    price: req.body.price,
-    rating: req.body.rating,
+    // price: req.body.price,
+    // rating: req.body.rating,
     description: req.body.description,
     phone: req.body.phone,
     age: req.body.age,
-    address: req.body.address
+    address: req.body.address,
+    gpa: req.body.gpa,
+    skills: req.body.skills,
+    certificate: req.body.certificate
   });
+
+  // set user._id that match mentorId isMentor to true
+  User.findByIdAndUpdate(
+    { _id: req.body.mentorId },
+    { role: 'mentor' },
+    function (err, result) {
+      if (err) {
+        res
+          .status(404)
+          .json({ success: false, message: 'Failed to update user' });
+      }
+    }
+  );
+
   newItem.save().then((item) => res.json(item));
 });
 

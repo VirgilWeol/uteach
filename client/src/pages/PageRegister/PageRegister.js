@@ -9,7 +9,8 @@ export default function PageRegister() {
     name: '',
     phone: '',
     age: '',
-    password: ''
+    password: '',
+    address: ''
   });
   const [msg, setMsg] = useState(null);
 
@@ -18,7 +19,7 @@ export default function PageRegister() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { email, name, phone, age, password } = formData;
+  const { email, name, phone, age, password, address } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,7 +43,7 @@ export default function PageRegister() {
     e.preventDefault();
 
     try {
-      const newUser = { email, name, phone, age, password };
+      const newUser = { email, name, phone, age, password, address };
       dispatch(register(newUser));
     } catch (err) {
       setMsg(err.response.data.msg);
@@ -102,6 +103,17 @@ export default function PageRegister() {
               id='age'
               name='age'
               placeholder='Enter age'
+              className='p-2 mb-4 border rounded-sm border-slate-200'
+              onChange={onChange}
+            />
+            <label htmlFor='address' className='text-slate-500'>
+              Address
+            </label>
+            <input
+              type='text'
+              id='address'
+              name='address'
+              placeholder='Enter address'
               className='p-2 mb-4 border rounded-sm border-slate-200'
               onChange={onChange}
             />

@@ -19,12 +19,17 @@ import PageSelectMentor from './pages/PaeSelectMentor/PageSelectMentor';
 import PageCheckout from './pages/PageCheckout/PageCheckout';
 import PageHistory from './pages/PageHistory/PageHistory';
 import PageProfile from './pages/PageProfile/PageProfile';
+import PageRequestMentor from './pages/PageRequestMentor/PageRequestMentor';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     store.dispatch(loadUser());
+
+    if (!store.getState().auth) {
+      setIsAuth(false);
+    }
 
     if (store.getState().auth.isAuth) {
       setIsAuth(true);
@@ -84,6 +89,14 @@ function App() {
             element={
               <PrivateRoute>
                 <PageProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/request-mentor'
+            element={
+              <PrivateRoute>
+                <PageRequestMentor />
               </PrivateRoute>
             }
           />

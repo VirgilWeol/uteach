@@ -49,7 +49,8 @@ router.post('/', function (req, res) {
                 name: user.name,
                 email: user.email,
                 age: user.age,
-                phone: user.phone
+                phone: user.phone,
+                address: user.address
               }
             });
           }

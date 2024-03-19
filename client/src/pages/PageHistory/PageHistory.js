@@ -44,7 +44,7 @@ export default function PageHistory() {
           />
         </div>
       </div>
-      <div>
+      <div className='flex flex-col gap-4'>
         {filteredOrders.map((order, i) => (
           <div
             className='flex flex-col justify-between p-4 bg-white rounded-md md:flex-row'

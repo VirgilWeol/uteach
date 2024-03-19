@@ -34,6 +34,7 @@ export const getOrderByStudentId = (studentId) => (dispatch) => {
 };
 
 export const addOrder = (order) => (dispatch, getState) => {
+  dispatch(setOrderLoading());
   api
     .post('/api/orders', order, tokenconfig(getState))
     .then((res) =>

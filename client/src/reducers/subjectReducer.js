@@ -29,7 +29,8 @@ export default function (state = initialState, action) {
     case ADD_SUBJECT:
       return {
         ...state,
-        subjects: [action.payload, ...state.subjects]
+        subjects: [action.payload, ...state.subjects],
+        loading: false
       };
     case SUBJECT_LOADING:
       return {

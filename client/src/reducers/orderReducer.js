@@ -27,7 +27,8 @@ export default function (state = initialState, action) {
     case ADD_ORDER:
       return {
         ...state,
-        orders: [action.payload, ...state.orders]
+        orders: [action.payload, ...state.orders],
+        loading: false
       };
     case ORDER_LOADING:
       return {

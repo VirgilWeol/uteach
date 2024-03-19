@@ -38,6 +38,7 @@ export const deleteSubject = (_id) => (dispatch, getState) => {
 };
 
 export const addSubject = (subject) => (dispatch, getState) => {
+  dispatch(subjectLoading());
   api
     .post('/api/subjects', subject, tokenconfig(getState))
     .then((res) =>

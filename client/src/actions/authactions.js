@@ -17,18 +17,26 @@ export const loadUser = () => (dispatch, getState) => {
 
   api
     .get('/api/auth/user', tokenconfig(getState))
-    .then((res) =>
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data
-      })
-    )
+    .then((res) => {
+      // insert activeRole to user object
+      const user = {
+        ...res.data,
+        activeRole: 'user'
+      };
+      dispatch({ type: USER_LOADED, payload: user });
+    })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: AUTH_ERROR
       });
     });
+};
+
+export const changeRole = (role) => (dispatch, getState) => {
+  const user = getState().auth.user;
+  user.activeRole = role;
+  dispatch({ type: USER_LOADED, payload: user });
 };
 
 export const register =
