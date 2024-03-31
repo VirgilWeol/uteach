@@ -20,6 +20,7 @@ export default function PageCheckout() {
 
   useEffect(() => {
     dispatch(getItem());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChange = (e) =>
@@ -29,6 +30,7 @@ export default function PageCheckout() {
     const data = {
       itemId,
       studentId: user._id,
+      studentName: user.name,
       mentorId: items.items.find((item) => item._id === itemId).mentorId,
       subject: subjectName,
       price,

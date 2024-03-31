@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem } from '../../actions/itemActions';
+import { addItem, getItem, getItemByMentorId } from '../../actions/itemActions';
 import { getSubject } from '../../actions/subjectActions';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ export default function PageRequestMentor() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const item = useSelector((state) => state.item);
+  const error = useSelector((state) => state.error);
   const subjectState = useSelector((state) => state.subject);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -21,11 +22,20 @@ export default function PageRequestMentor() {
     description: ''
   });
   const { subjectData, gpa, skills, certificate, description } = formData;
+  const [requested, setRequested] = useState(false);
 
   useEffect(() => {
     dispatch(getSubject());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(getItem());
+
+    // if userId exist in item collection then set requested to true
+    if (item.items) {
+      const found = item.items.find((item) => item.mentorId === user._id);
+      if (found) {
+        setRequested(true);
+      }
+    }
+  }, [dispatch, user._id, item.items]);
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,10 +67,36 @@ export default function PageRequestMentor() {
 
     dispatch(addItem(data));
 
+    if (!error.id) {
+      navigate('/');
+    }
+
     if (item.loading === false) {
       navigate('/');
     }
   };
+
+  if (item.loading === true) {
+    return (
+      <div className='container p-4 mx-auto'>
+        <div className='p-4 bg-white rounded-md'>
+          <h1 className='text-3xl font-bold text-dark'>Mentor Form</h1>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (requested === true) {
+    return (
+      <div className='container p-4 mx-auto'>
+        <div className='p-4 bg-white rounded-md'>
+          <h1 className='text-3xl font-bold text-dark'>Mentor Form</h1>
+          <p>Waiting for approval</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='container p-4 mx-auto'>

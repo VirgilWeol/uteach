@@ -18,10 +18,11 @@ export const loadUser = () => (dispatch, getState) => {
   api
     .get('/api/auth/user', tokenconfig(getState))
     .then((res) => {
-      // insert activeRole to user object
+      const role = res.data.role === 'admin' ? 'admin' : 'student';
+
       const user = {
         ...res.data,
-        activeRole: 'user'
+        activeRole: role
       };
       dispatch({ type: USER_LOADED, payload: user });
     })
@@ -40,7 +41,7 @@ export const changeRole = (role) => (dispatch, getState) => {
 };
 
 export const register =
-  ({ email, name, phone, age, password }) =>
+  ({ email, name, phone, age, password, address }) =>
   (dispatch) => {
     const config = {
       header: {
@@ -49,8 +50,15 @@ export const register =
     };
 
     api
-      .post('/api/users', { name, email, phone, age, password }, config)
-      .then((res) => dispatch({ type: REGISTER_SUCCESS, payload: res.data }))
+      .post(
+        '/api/users',
+        { name, email, phone, age, password, address },
+        config
+      )
+      .then((res) => {
+        dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+        window.location.reload();
+      })
       .catch((err) => {
         dispatch(
           returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')

@@ -1,4 +1,10 @@
-import { GET_ORDER, ADD_ORDER, DELETE_ORDER, ORDER_LOADING } from './types';
+import {
+  GET_ORDER,
+  ADD_ORDER,
+  DELETE_ORDER,
+  ORDER_LOADING,
+  UPDATE_ORDER
+} from './types';
 import { tokenconfig } from './authactions';
 import { returnErrors } from './erroractions';
 import api from '../utils/api';
@@ -25,6 +31,21 @@ export const getOrderByStudentId = (studentId) => (dispatch) => {
     .then((res) =>
       dispatch({
         type: GET_ORDER,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const updateOrder = (id, order) => (dispatch, getState) => {
+  dispatch(setOrderLoading());
+  api
+    .put(`/api/orders/${id}`, order, tokenconfig(getState))
+    .then((res) =>
+      dispatch({
+        type: UPDATE_ORDER,
         payload: res.data
       })
     )

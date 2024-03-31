@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../actions/authactions';
+import { loadUser, login } from '../../actions/authactions';
 import { clearErrors } from '../../actions/erroractions';
 import PropTypes from 'prop-types';
 
@@ -26,6 +26,7 @@ function PageLogin() {
     }
 
     if (isAuth) {
+      dispatch(loadUser()); // Load user data (if authenticated)
       clearErrors();
       navigate('/');
     }

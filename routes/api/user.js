@@ -23,14 +23,14 @@ router.get('/', function (req, res) {
 // @desc     Authenticate user
 // @access   Public
 router.post('/', function (req, res) {
-  const { email, name, phone, age, password } = req.body;
-  if (!email || !name || !phone || !age || !password) {
+  const { email, name, phone, age, password, address } = req.body;
+  if (!email || !name || !phone || !age || !password || !address) {
     return res.status(400).json({ msg: 'please enter all' });
   }
   User.findOne({ email }).then((user) => {
     if (user) return res.status(400).json({ msg: 'user already exists' });
   });
-  const newUser = new User({ name, email, phone, age, password });
+  const newUser = new User({ name, email, phone, age, password, address });
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;

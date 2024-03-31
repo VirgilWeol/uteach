@@ -18,5 +18,6 @@ export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const GET_ORDER = 'GET_ORDER';
 export const ADD_ORDER = 'ADD_ORDER';
+export const UPDATE_ORDER = 'UPDATE_ORDER';
 export const DELETE_ORDER = 'DELETE_ORDER';
 export const ORDER_LOADING = 'ORDER_LOADING';

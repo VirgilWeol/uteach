@@ -33,6 +33,35 @@ export const getItemBySubject = (subject) => (dispatch) => {
     );
 };
 
+export const getItemByMentorId = (mentorId) => (dispatch) => {
+  dispatch(itemLoading());
+  api
+    .get(`/api/items/mentor/${mentorId}`)
+    .then((res) =>
+      dispatch({
+        type: GET_ITEM,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const updateItem = (_id, status) => (dispatch, getState) => {
+  api
+    .put(`/api/items/${_id}`, { status }, tokenconfig(getState))
+    .then((res) =>
+      dispatch({
+        type: GET_ITEM,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
 export const deleteItem = (_id) => (dispatch, getState) => {
   api
     .delete(`/api/items/${_id}`, tokenconfig(getState))

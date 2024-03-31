@@ -35,6 +35,48 @@ router.get('/subject/:subject', function (req, res) {
     .catch((err) => res.status(404).json({ success: false }));
 });
 
+// @route    GET api/items/mentor/:mentorId
+// @desc     Get An Item by mentorId
+// @access   Public
+router.get('/mentor/:mentorId', function (req, res) {
+  Item.find({ mentorId: req.params.mentorId })
+    .then((item) => res.json(item))
+    .catch((err) => res.status(404).json({ success: false }));
+});
+
+// @route    PUT api/items/:id
+// @desc     Update An Item status
+// @access   Private
+router.put('/:_id', auth, function (req, res) {
+  Item.findByIdAndUpdate(
+    req.params._id,
+    { status: req.body.status },
+    function (err, result) {
+      if (err) {
+        res
+          .status(404)
+          .json({ success: false, message: 'Failed to update item' });
+      }
+    }
+  );
+
+  // find item by id and get mentorId
+  Item.findById(req.params._id).then((item) => {
+    // set user._id that match mentorId isMentor to true
+    User.findByIdAndUpdate(
+      { _id: item.mentorId },
+      { role: 'mentor' },
+      function (err, result) {
+        if (err) {
+          res
+            .status(404)
+            .json({ success: false, message: 'Failed to update user' });
+        }
+      }
+    );
+  });
+});
+
 // @route    POST api/items
 // @desc     Create An Item
 // @access   Private
@@ -52,21 +94,22 @@ router.post('/', auth, function (req, res) {
     address: req.body.address,
     gpa: req.body.gpa,
     skills: req.body.skills,
-    certificate: req.body.certificate
+    certificate: req.body.certificate,
+    status: 'Waiting for approval'
   });
 
-  // set user._id that match mentorId isMentor to true
-  User.findByIdAndUpdate(
-    { _id: req.body.mentorId },
-    { role: 'mentor' },
-    function (err, result) {
-      if (err) {
-        res
-          .status(404)
-          .json({ success: false, message: 'Failed to update user' });
-      }
-    }
-  );
+  // // set user._id that match mentorId isMentor to true
+  // User.findByIdAndUpdate(
+  //   { _id: req.body.mentorId },
+  //   { role: 'mentor' },
+  //   function (err, result) {
+  //     if (err) {
+  //       res
+  //         .status(404)
+  //         .json({ success: false, message: 'Failed to update user' });
+  //     }
+  //   }
+  // );
 
   newItem.save().then((item) => res.json(item));
 });

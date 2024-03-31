@@ -59,6 +59,11 @@ const ItemSchema = new schema({
   certificate: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    required: true,
+    default: 'Waiting for Approval'
   }
 });
 

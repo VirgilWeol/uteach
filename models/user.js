@@ -36,6 +36,10 @@ const UserSchema = new schema({
     type: String,
     required: true,
     default: 'student'
+  },
+  address: {
+    type: String,
+    required: false
   }
 });
 

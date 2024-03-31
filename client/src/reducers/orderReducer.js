@@ -3,7 +3,8 @@ import {
   GET_ORDER,
   ADD_ORDER,
   DELETE_ORDER,
-  ORDER_LOADING
+  ORDER_LOADING,
+  UPDATE_ORDER
 } from '../actions/types';
 
 const initialState = {
@@ -28,6 +29,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         orders: [action.payload, ...state.orders],
+        loading: false
+      };
+    case UPDATE_ORDER:
+      return {
+        ...state,
+        orders: state.orders.map((order) =>
+          order._id === action.payload._id ? action.payload : order
+        ),
         loading: false
       };
     case ORDER_LOADING:

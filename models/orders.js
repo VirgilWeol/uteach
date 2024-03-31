@@ -18,6 +18,10 @@ const OrderSchema = new schema({
     type: String,
     required: true
   },
+  studentName: {
+    type: String,
+    required: true
+  },
   subject: {
     type: String,
     required: true

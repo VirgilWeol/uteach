@@ -134,7 +134,7 @@ export default function PageRegister() {
               type='submit'
               className='p-2 text-white bg-blue-500 rounded-md'
               onClick={onSubmit}>
-              Login
+              Register
             </button>
           </div>
         </div>

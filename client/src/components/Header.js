@@ -25,40 +25,45 @@ function Header() {
   };
 
   const handleMentorMode = () => {
-    // if (auth.user.role === 'mentor') {
-    //   if (auth.user.activeRole === 'user') {
-    //     dispatch(changeRole('mentor'));
-    //     navigate('/history');
-    //     console.log('mentor mode');
-    //     return;
-    //   }
-    //   if (auth.user.activeRole === 'mentor') {
-    //     dispatch(changeRole('user'));
-    //     navigate('/');
-    //     console.log('user mode');
-    //     return;
-    //   }
-    // }
-    navigate('/request-mentor');
-    if (auth.user.role === 'user') {
+    if (auth.user.role === 'mentor') {
+      if (auth.user.activeRole === 'student') {
+        dispatch(changeRole('mentor'));
+        navigate('/');
+        console.log('mentor mode');
+        return;
+      }
+      if (auth.user.activeRole === 'mentor') {
+        dispatch(changeRole('student'));
+        navigate('/');
+        console.log('user mode');
+        return;
+      }
+    }
+    if (auth.user.role === 'student') {
+      navigate('/request-mentor');
       return;
     }
   };
 
   const handleMentorButton = () => {
     if (auth.user.role === 'mentor') {
-      if (auth.user.activeRole === 'user') return 'Mentor Mode';
-      return 'Student Mode';
+      if (auth.user.activeRole === 'student') return 'Mentor Mode';
+      if (auth.user.activeRole === 'mentor') return 'Student Mode';
     }
-    if (auth.user.role === 'user') {
-      return 'Request Mentor';
+    if (auth.user.role === 'student') {
+      if (auth.user.activeRole === 'student') return 'Request Mentor';
+      if (auth.user.activeRole === 'mentor') return 'Student Mode';
     }
   };
 
   return (
     <div
       className={`relative bg-white shadow-md ${
-        auth.user.activeRole === 'mentor' && 'border-b-4 border-blue-500'
+        auth.user.activeRole === 'mentor'
+          ? 'border-b-4 border-blue-500'
+          : auth.user.activeRole === 'admin'
+          ? 'border-b-4 border-yellow-500'
+          : ''
       }`}>
       <div className='px-4 mx-auto lg:container'>
         <div className='flex items-center justify-between p-2'>
@@ -72,26 +77,63 @@ function Header() {
                   Home
                 </Link>
               </li>
-              <li>
-                <Link to='/history' className='font-medium text-slate-800'>
-                  Contract History
-                </Link>
-              </li>
+              {auth.user.role === 'admin' ? (
+                <>
+                  <li>
+                    <Link
+                      to='/admin/users'
+                      className='font-medium text-slate-800'>
+                      Manage Users
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/admin/orders'
+                      className='font-medium text-slate-800'>
+                      Manage Orders
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/admin/Subjects'
+                      className='font-medium text-slate-800'>
+                      Manage Subjects
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/admin/Items'
+                      className='font-medium text-slate-800'>
+                      Manage Items
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to='/history' className='font-medium text-slate-800'>
+                      Contract History
+                    </Link>
+                  </li>
+                  <button
+                    className='flex items-center justify-center gap-1 px-4 py-2 font-medium text-white bg-blue-500 rounded-md'
+                    onClick={() => handleMentorMode()}>
+                    <HiAcademicCap />
+                    {handleMentorButton()}
+                  </button>
+                </>
+              )}
             </ul>
-            <button
-              className='flex items-center justify-center gap-1 px-4 py-2 font-medium text-white bg-blue-500 rounded-md'
-              onClick={() => handleMentorMode()}>
-              <HiAcademicCap />
-              {handleMentorButton()}
-            </button>
-            <div className='w-8 h-8'>
-              <img
-                src={avatar}
-                alt=''
-                className='rounded-full'
-                onClick={() => navigate(`/profile/${auth.user._id}`)}
-              />
-            </div>
+            {auth.user.role !== 'admin' && (
+              <div className='w-8 h-8'>
+                <img
+                  src={avatar}
+                  alt=''
+                  className='rounded-full'
+                  onClick={() => navigate(`/profile/${auth.user._id}`)}
+                />
+              </div>
+            )}
             <div>
               <span>
                 {auth.user ? (
@@ -121,22 +163,64 @@ function Header() {
                 Home
               </Link>
             </li>
-            <li>
-              <Link to='/history' className='font-medium text-slate-800'>
-                Contract History
-              </Link>
-            </li>
-            <li>
-              <button className='flex items-center justify-center gap-1 px-4 py-2 font-medium text-white bg-blue-500 rounded-md'>
-                <HiAcademicCap />
-                Mentor Mode
-              </button>
-            </li>
-            <li>
+            {auth.user.role === 'admin' ? (
+              <>
+                <li>
+                  <Link
+                    to='/admin/users'
+                    className='font-medium text-slate-800'>
+                    Manage Users
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to='/admin/orders'
+                    className='font-medium text-slate-800'>
+                    Manage Orders
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to='/admin/Subjects'
+                    className='font-medium text-slate-800'>
+                    Manage Subjects
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to='/admin/Items'
+                    className='font-medium text-slate-800'>
+                    Manage Items
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to='/history' className='font-medium text-slate-800'>
+                    Contract History
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    className='flex items-center justify-center gap-1 px-4 py-2 font-medium text-white bg-blue-500 rounded-md'
+                    onClick={() => handleMentorMode()}>
+                    <HiAcademicCap />
+                    {handleMentorButton()}
+                  </button>
+                </li>
+              </>
+            )}
+            {auth.user.role !== 'admin' && (
               <div className='w-8 h-8'>
-                <img src={avatar} alt='' className='rounded-full' />
+                <img
+                  src={avatar}
+                  alt=''
+                  className='rounded-full'
+                  onClick={() => navigate(`/profile/${auth.user._id}`)}
+                />
               </div>
-            </li>
+            )}
             <li>
               <span>
                 {auth.user ? (
