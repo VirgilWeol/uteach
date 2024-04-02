@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const Order = require('../../models/orders');
 const Item = require('../../models/items');
+const Subject = require('../../models/subjects');
 const cors = require('cors');
 const calculateAverageRating = require('../../middleware/calculateRating');
 
@@ -117,6 +118,21 @@ router.post('/', auth, function (req, res) {
     description: req.body.description,
     status: 'Offer sent to mentor'
   });
+
+  // find subject by subjectName and decrement students
+  Subject.findOneAndUpdate(
+    { subjectName: req.body.subject },
+    { $inc: { students: 1 } },
+    { new: true },
+    function (err, subject) {
+      if (err) {
+        return res
+          .status(500)
+          .send('There was a problem updating the subject.');
+      }
+    }
+  );
+
   newOrder.save().then((order) => res.json(order));
 });
 
@@ -124,6 +140,21 @@ router.post('/', auth, function (req, res) {
 // @desc     Delete An Order
 // @access   Private
 router.delete('/:_id', auth, function (req, res) {
+  // find subject by subjectName and decrement students
+  Order.findById(req.params._id).then((order) => {
+    Subject.findOneAndUpdate(
+      { subjectName: order.subject },
+      { $inc: { students: -1 } },
+      function (err, result) {
+        if (err) {
+          res
+            .status(404)
+            .json({ success: false, message: 'Failed to update subject' });
+        }
+      }
+    );
+  });
+
   Order.findById(req.params._id)
     .then((order) => order.remove().then(() => res.json({ success: true })))
     .catch((err) => res.status(404).json({ success: false }));

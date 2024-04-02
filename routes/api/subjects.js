@@ -39,6 +39,24 @@ router.post('/', function (req, res) {
   newSubject.save().then((subject) => res.json(subject));
 });
 
+// @route    PUT api/subjects/:id
+// @desc     Update A Subject
+// @access   Private
+router.put('/:_id', function (req, res) {
+  Subject.findByIdAndUpdate(
+    req.params._id,
+    req.body,
+    { new: true },
+    function (err, subject) {
+      if (err)
+        return res
+          .status(500)
+          .send('There was a problem updating the subject.');
+      res.status(200).send(subject);
+    }
+  );
+});
+
 // @route    DELETE api/subjects/:id
 // @desc     Delete A Subject
 // @access   Private

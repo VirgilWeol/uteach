@@ -2,7 +2,8 @@ import {
   GET_SUBJECT,
   ADD_SUBJECT,
   DELETE_SUBJECT,
-  SUBJECT_LOADING
+  SUBJECT_LOADING,
+  UPDATE_SUBJECT
 } from './types';
 import { tokenconfig } from './authactions';
 import { returnErrors } from './erroractions';
@@ -44,6 +45,21 @@ export const addSubject = (subject) => (dispatch, getState) => {
     .then((res) =>
       dispatch({
         type: ADD_SUBJECT,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const updateSubject = (_id, subject) => (dispatch, getState) => {
+  dispatch(subjectLoading());
+  api
+    .put(`/api/subjects/${_id}`, subject, tokenconfig(getState))
+    .then((res) =>
+      dispatch({
+        type: UPDATE_SUBJECT,
         payload: res.data
       })
     )

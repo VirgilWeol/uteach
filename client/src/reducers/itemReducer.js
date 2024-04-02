@@ -3,6 +3,7 @@ import {
   GET_ITEM,
   ADD_ITEM,
   DELETE_ITEM,
+  UPDATE_ITEM,
   ITEM_LOADING
 } from '../actions/types';
 
@@ -29,6 +30,13 @@ export default function (state = initialState, action) {
         ...state,
         items: [action.payload, ...state.items],
         loading: false
+      };
+    case UPDATE_ITEM:
+      return {
+        ...state,
+        items: state.items.map((item) =>
+          item._id === action.payload._id ? action.payload : item
+        )
       };
     case ITEM_LOADING:
       return {

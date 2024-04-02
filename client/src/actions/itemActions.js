@@ -1,4 +1,10 @@
-import { GET_ITEM, ADD_ITEM, DELETE_ITEM, ITEM_LOADING } from './types';
+import {
+  GET_ITEM,
+  ADD_ITEM,
+  DELETE_ITEM,
+  UPDATE_ITEM,
+  ITEM_LOADING
+} from './types';
 import { tokenconfig } from './authactions';
 import { returnErrors } from './erroractions';
 import api from '../utils/api';
@@ -48,12 +54,27 @@ export const getItemByMentorId = (mentorId) => (dispatch) => {
     );
 };
 
-export const updateItem = (_id, status) => (dispatch, getState) => {
+export const updateItem = (_id, item) => (dispatch, getState) => {
+  dispatch(itemLoading());
+  api
+    .put(`/api/items/${_id}`, item, tokenconfig(getState))
+    .then((res) =>
+      dispatch({
+        type: UPDATE_ITEM,
+        payload: res.data
+      })
+    )
+    .catch((err) =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const updateItemStatus = (_id, status) => (dispatch, getState) => {
   api
     .put(`/api/items/${_id}`, { status }, tokenconfig(getState))
     .then((res) =>
       dispatch({
-        type: GET_ITEM,
+        type: UPDATE_ITEM,
         payload: res.data
       })
     )

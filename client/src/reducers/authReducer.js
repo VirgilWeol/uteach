@@ -6,7 +6,8 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  GET_ALL_USERS
 } from '../actions/types';
 
 const initialState = {
@@ -50,6 +51,11 @@ export default function (state = initialState, action) {
         token: null,
         user: null,
         isLoading: false
+      };
+    case GET_ALL_USERS:
+      return {
+        ...state,
+        users: action.payload
       };
     default:
       return state;

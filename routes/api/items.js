@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const Item = require('../../models/items');
+const Subject = require('../../models/subjects');
 const cors = require('cors');
 
 const app = express();
@@ -44,10 +45,27 @@ router.get('/mentor/:mentorId', function (req, res) {
     .catch((err) => res.status(404).json({ success: false }));
 });
 
+// update item
 // @route    PUT api/items/:id
-// @desc     Update An Item status
+// @desc     Update An Item
 // @access   Private
 router.put('/:_id', auth, function (req, res) {
+  Item.findByIdAndUpdate(
+    req.params._id,
+    req.body,
+    { new: true },
+    function (err, item) {
+      if (err)
+        return res.status(500).send('There was a problem updating the item.');
+      res.status(200).send(item);
+    }
+  );
+});
+
+// @route    PUT api/items/status/:id
+// @desc     Update An Item status
+// @access   Private
+router.put('/status/:_id', auth, function (req, res) {
   Item.findByIdAndUpdate(
     req.params._id,
     { status: req.body.status },
@@ -86,8 +104,6 @@ router.post('/', auth, function (req, res) {
     subjectId: req.body.subjectId,
     mentorName: req.body.mentorName,
     subject: req.body.subject,
-    // price: req.body.price,
-    // rating: req.body.rating,
     description: req.body.description,
     phone: req.body.phone,
     age: req.body.age,
@@ -98,18 +114,18 @@ router.post('/', auth, function (req, res) {
     status: 'Waiting for approval'
   });
 
-  // // set user._id that match mentorId isMentor to true
-  // User.findByIdAndUpdate(
-  //   { _id: req.body.mentorId },
-  //   { role: 'mentor' },
-  //   function (err, result) {
-  //     if (err) {
-  //       res
-  //         .status(404)
-  //         .json({ success: false, message: 'Failed to update user' });
-  //     }
-  //   }
-  // );
+  // find subject by subjectName and increment mentors
+  Subject.findOneAndUpdate(
+    { subjectName: req.body.subject },
+    { $inc: { mentors: 1 } },
+    function (err, result) {
+      if (err) {
+        res
+          .status(404)
+          .json({ success: false, message: 'Failed to update subject' });
+      }
+    }
+  );
 
   newItem.save().then((item) => res.json(item));
 });
@@ -118,6 +134,21 @@ router.post('/', auth, function (req, res) {
 // @desc     Delete An Item
 // @access   Private
 router.delete('/:_id', auth, function (req, res) {
+  // find subject by subjectName and decrement mentors
+  Item.findById(req.params._id).then((item) => {
+    Subject.findOneAndUpdate(
+      { subjectName: item.subject },
+      { $inc: { mentors: -1 } },
+      function (err, result) {
+        if (err) {
+          res
+            .status(404)
+            .json({ success: false, message: 'Failed to update subject' });
+        }
+      }
+    );
+  });
+
   Item.findById(req.params._id)
     .then((item) => item.remove().then(() => res.json({ success: true })))
     .catch((err) => res.status(404).json({ success: false }));

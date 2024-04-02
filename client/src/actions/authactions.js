@@ -90,7 +90,7 @@ export const login =
 export const editProfile = (user) => (dispatch, getState) => {
   api
     .put(`/api/auth/${user._id}`, user, tokenconfig(getState))
-    .then((res) => dispatch({ type: USER_LOADED, payload: res.data }))
+    .then((res) => dispatch({ type: 'EDIT_PROFILE', payload: res.data }))
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
@@ -113,4 +113,15 @@ export const tokenconfig = (getState) => {
     config.headers['x-auth-token'] = tok;
   }
   return config;
+};
+
+export const getAllUsers = () => (dispatch, getState) => {
+  api
+    .get('/api/auth/users', tokenconfig(getState))
+    .then((res) => {
+      dispatch({ type: 'GET_ALL_USERS', payload: res.data });
+    })
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+    });
 };

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSubject } from '../../actions/subjectActions';
 import { Link } from 'react-router-dom';
 import { getOrderByStudentId, updateOrder } from '../../actions/orderActions';
-import { getItem, updateItem } from '../../actions/itemActions';
+import { getItem, updateItemStatus } from '../../actions/itemActions';
 
 export default function PageHome() {
   const dispatch = useDispatch();
@@ -21,6 +21,8 @@ export default function PageHome() {
   const [search, setSearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState('');
   const adjustPriceModalRef = useRef(null);
+
+  console.log('user', user.activeRole);
 
   useEffect(() => {
     if (user.activeRole === 'student') {
@@ -43,13 +45,13 @@ export default function PageHome() {
     return color;
   }
 
-  if (subjects.loading) {
-    return <h1>Loading...</h1>;
-  }
+  // if (subjects.loading) {
+  //   return <h1>Loading...</h1>;
+  // }
 
-  if (subjects.subjects.length === 0) {
-    return <h1>No Subject Found</h1>;
-  }
+  // if (subjects.subjects.length === 0) {
+  //   return <h1>No Subject Found</h1>;
+  // }
 
   let filteredSubjects = [];
 
@@ -72,13 +74,13 @@ export default function PageHome() {
     );
   };
 
-  if (orders.orders.length === 0) {
-    return (
-      <div className='container p-4 mx-auto'>
-        <h1>No Order Found</h1>
-      </div>
-    );
-  }
+  // if (orders.orders.length === 0) {
+  //   return (
+  //     <div className='container p-4 mx-auto'>
+  //       <h1>No Order Found</h1>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -311,7 +313,7 @@ export default function PageHome() {
                     <button
                       className='px-12 py-2 mt-4 bg-transparent rounded-md text-slate-500 '
                       onClick={() => {
-                        dispatch(updateItem(item._id, 'Declined'));
+                        dispatch(updateItemStatus(item._id, 'Declined'));
                         window.location.reload();
                       }}>
                       Decline
@@ -319,7 +321,7 @@ export default function PageHome() {
                     <button
                       className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
                       onClick={() => {
-                        dispatch(updateItem(item._id, 'Approved'));
+                        dispatch(updateItemStatus(item._id, 'Approved'));
                         window.location.reload();
                       }}>
                       Approve

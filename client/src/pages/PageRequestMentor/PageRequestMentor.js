@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, getItem, getItemByMentorId } from '../../actions/itemActions';
+import { addItem, getItem } from '../../actions/itemActions';
 import { getSubject } from '../../actions/subjectActions';
 import { useNavigate } from 'react-router-dom';
 

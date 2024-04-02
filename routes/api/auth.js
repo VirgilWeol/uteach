@@ -51,6 +51,28 @@ router.post('/authuser', function (req, res) {
   });
 });
 
+// @route    GET api/auth/users
+// @desc     Get all users
+// @access   Public
+router.get('/users', function (req, res) {
+  User.find({}, function (err, users) {
+    if (err)
+      return res.status(500).send('There was a problem finding the users.');
+    res.status(200).send(users);
+  });
+});
+
+// @route    DELETE api/auth
+// @desc     Delete user
+// @access   Private
+router.delete('/:id', auth, function (req, res) {
+  User.findByIdAndRemove(req.params.id, function (err, user) {
+    if (err)
+      return res.status(500).send('There was a problem deleting the user.');
+    res.status(200).send('User: ' + user.name + ' was deleted.');
+  });
+});
+
 // @route    PUT api/auth
 // @desc     Update user
 // @access   Private

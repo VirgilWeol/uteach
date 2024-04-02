@@ -1,10 +1,12 @@
 export const GET_ITEM = 'GET_ITEM';
 export const ADD_ITEM = 'ADD_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
+export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const ITEM_LOADING = 'ITEM_LOADING';
 export const GET_SUBJECT = 'GET_SUBJECT';
 export const ADD_SUBJECT = 'ADD_SUBJECT';
 export const DELETE_SUBJECT = 'DELETE_SUBJECT';
+export const UPDATE_SUBJECT = 'UPDATE_SUBJECT';
 export const SUBJECT_LOADING = 'SUBJECT_LOADING';
 export const USER_LOADING = 'USER_LOADING';
 export const USER_LOADED = 'USER_LOADED';
@@ -21,3 +23,9 @@ export const ADD_ORDER = 'ADD_ORDER';
 export const UPDATE_ORDER = 'UPDATE_ORDER';
 export const DELETE_ORDER = 'DELETE_ORDER';
 export const ORDER_LOADING = 'ORDER_LOADING';
+
+export const GET_ALL_USERS = 'GET_ALL_USERS';
+export const GET_USER = 'GET_USER';
+export const ADD_USER = 'ADD_USER';
+export const DELETE_USER = 'DELETE_USER';
+export const UPDATE_USER = 'UPDATE_USER';
