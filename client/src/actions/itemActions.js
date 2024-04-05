@@ -71,7 +71,7 @@ export const updateItem = (_id, item) => (dispatch, getState) => {
 
 export const updateItemStatus = (_id, status) => (dispatch, getState) => {
   api
-    .put(`/api/items/${_id}`, { status }, tokenconfig(getState))
+    .put(`/api/items/status/${_id}`, { status }, tokenconfig(getState))
     .then((res) =>
       dispatch({
         type: UPDATE_ITEM,

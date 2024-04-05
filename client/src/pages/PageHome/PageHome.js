@@ -9,7 +9,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubject } from '../../actions/subjectActions';
 import { Link } from 'react-router-dom';
-import { getOrderByStudentId, updateOrder } from '../../actions/orderActions';
+import {
+  getOrderByMentorId,
+  getOrderByStudentId,
+  updateOrder
+} from '../../actions/orderActions';
 import { getItem, updateItemStatus } from '../../actions/itemActions';
 
 export default function PageHome() {
@@ -29,7 +33,7 @@ export default function PageHome() {
       dispatch(getSubject());
     }
     if (user.activeRole === 'mentor') {
-      dispatch(getOrderByStudentId(user._id));
+      dispatch(getOrderByMentorId(user._id));
     }
     if (user.activeRole === 'admin') {
       dispatch(getItem());
@@ -72,6 +76,7 @@ export default function PageHome() {
         status: 'Offer sent to student'
       })
     );
+    adjustPriceModalRef.current.close();
   };
 
   // if (orders.orders.length === 0) {
@@ -217,11 +222,13 @@ export default function PageHome() {
                     <div className='flex justify-end gap-2'>
                       <button
                         className='px-12 py-2 mt-4 bg-transparent rounded-md text-slate-500 '
-                        onClick={() =>
+                        onClick={(e) => {
                           dispatch(
                             updateOrder(order._id, { status: 'declined' })
-                          )
-                        }>
+                          );
+                          // set this button to disabled
+                          e.target.disabled = true;
+                        }}>
                         Decline
                       </button>
                       <button
@@ -234,33 +241,36 @@ export default function PageHome() {
                       </button>
                       <button
                         className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
-                        onClick={() =>
+                        onClick={(e) => {
                           dispatch(
                             updateOrder(order._id, { status: 'Approved' })
-                          )
-                        }>
+                          );
+                          e.target.disabled = true;
+                        }}>
                         Approve
                       </button>
                     </div>
                   ) : order.status === 'Approved' ? (
                     <button
                       className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
-                      onClick={() =>
+                      onClick={(e) => {
                         dispatch(
                           updateOrder(order._id, { status: 'On Progress' })
-                        )
-                      }>
+                        );
+                        e.target.disabled = true;
+                      }}>
                       Start Session
                     </button>
                   ) : (
                     order.status === 'On Progress' && (
                       <button
                         className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
-                        onClick={() =>
+                        onClick={(e) => {
                           dispatch(
                             updateOrder(order._id, { status: 'Give Feedback' })
-                          )
-                        }>
+                          );
+                          e.target.disabled = true;
+                        }}>
                         End Session
                       </button>
                     )
