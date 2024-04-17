@@ -21,7 +21,8 @@
     "redux-thunk": "^2.3.0",
     "swiper": "^11.0.7",
     "typescript": "^3.2.1",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "react-icons": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

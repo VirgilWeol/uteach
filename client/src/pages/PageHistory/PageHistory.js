@@ -126,14 +126,32 @@ export default function PageHistory() {
                     <button
                       className='px-12 py-2 mt-4 bg-transparent rounded-md text-slate-500 '
                       onClick={() =>
-                        dispatch(updateOrder(order._id, { status: 'declined' }))
+                        dispatch(updateOrder(order._id, { status: 'Declined' }))
                       }>
                       Decline
                     </button>
                     <button
                       className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
                       onClick={() =>
-                        dispatch(updateOrder(order._id, { status: 'approved' }))
+                        dispatch(updateOrder(order._id, { status: 'Approved' }))
+                      }>
+                      Approve
+                    </button>
+                  </div>
+                ) : user.activeRole === 'student' &&
+                  order.status === 'Offer sent to student' ? (
+                  <div className='flex justify-end gap-2'>
+                    <button
+                      className='px-12 py-2 mt-4 bg-transparent rounded-md text-slate-500 '
+                      onClick={() =>
+                        dispatch(updateOrder(order._id, { status: 'Declined' }))
+                      }>
+                      Decline
+                    </button>
+                    <button
+                      className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
+                      onClick={() =>
+                        dispatch(updateOrder(order._id, { status: 'Approved' }))
                       }>
                       Approve
                     </button>

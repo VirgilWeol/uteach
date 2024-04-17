@@ -31,7 +31,9 @@ router.get('/:_id', function (req, res) {
 // @desc     Get An Item by subject name
 // @access   Public
 router.get('/subject/:subject', function (req, res) {
-  Item.find({ subject: req.params.subject })
+  const subjectName = req.params.subject.replace(/%20/g, ' ');
+
+  Item.find({ subject: subjectName })
     .then((item) => res.json(item))
     .catch((err) => res.status(404).json({ success: false }));
 });
@@ -86,7 +88,7 @@ router.put('/status/:_id', auth, function (req, res) {
       { role: 'mentor' },
       function (err, result) {
         if (err) {
-          res
+          result
             .status(404)
             .json({ success: false, message: 'Failed to update user' });
         }
@@ -111,7 +113,7 @@ router.post('/', auth, function (req, res) {
     gpa: req.body.gpa,
     skills: req.body.skills,
     certificate: req.body.certificate,
-    status: 'Waiting for approval'
+    status: 'Waiting for Approval'
   });
 
   // find subject by subjectName and increment mentors

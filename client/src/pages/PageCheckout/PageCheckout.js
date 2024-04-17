@@ -32,7 +32,7 @@ export default function PageCheckout() {
       studentId: user._id,
       studentName: user.name,
       mentorId: items.items.find((item) => item._id === itemId).mentorId,
-      subject: subjectName,
+      subject: decodeURIComponent(subjectName),
       price,
       contract,
       description
@@ -51,7 +51,9 @@ export default function PageCheckout() {
     <div className='container p-4 mx-auto'>
       <div className='p-4 bg-white rounded-md'>
         <div className='flex flex-col items-start justify-between md:flex-row'>
-          <h1 className='text-3xl font-bold'>{subjectName}</h1>
+          <h1 className='text-3xl font-bold'>
+            {decodeURIComponent(subjectName)}
+          </h1>
           <div className='flex items-center gap-2'>
             <HiAcademicCap />
             <span className='font-medium text-slate-500'>

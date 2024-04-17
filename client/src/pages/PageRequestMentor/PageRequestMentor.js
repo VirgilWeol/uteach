@@ -35,10 +35,12 @@ export default function PageRequestMentor() {
         setRequested(true);
       }
     }
-  }, [dispatch, user._id, item.items]);
+  }, [dispatch]);
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  console.log('formData', formData.subjectData);
 
   const onSubmit = () => {
     const data = {
@@ -54,7 +56,7 @@ export default function PageRequestMentor() {
       skills,
       certificate
     };
-
+    console.log('formData', formData);
     console.log('data', data);
 
     // if there's empty field
@@ -111,17 +113,20 @@ export default function PageRequestMentor() {
             id='subject'
             name='subjectName'
             className='w-full p-2 bg-transparent border rounded-md active:outline-none focus:outline-none border-slate-200'
-            onChange={(e) => onChange(e)}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                subjectData: {
+                  subjectId: e.target.value,
+                  subject: e.target.options[e.target.selectedIndex].text
+                }
+              });
+            }}
             required>
             <option value=''>Select Subject</option>
             {subjectState.loading === false &&
               subjectState.subjects.map((sub) => (
-                <option
-                  key={sub._id}
-                  value={
-                    (subjectData.subjectId = sub._id) &&
-                    (subjectData.subject = sub.subjectName)
-                  }>
+                <option key={sub._id} value={(subjectData.subjectId = sub._id)}>
                   {sub.subjectName}
                 </option>
               ))}

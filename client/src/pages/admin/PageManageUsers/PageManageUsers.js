@@ -191,7 +191,10 @@ export default function PageManageUsers() {
                   </button>
                   <button
                     className='px-8 py-2 text-white bg-red-500 rounded-md'
-                    onClick={() => dispatch(deleteUser(user._id))}>
+                    onClick={() => {
+                      dispatch(deleteUser(user._id));
+                      dispatch(getUser());
+                    }}>
                     Delete
                   </button>
                 </div>

@@ -26,11 +26,11 @@ router.get('/', function (req, res) {
 router.post('/authuser', function (req, res) {
   const { email, password } = req.body;
   if (!email || !password)
-    return res.status(400).json({ msg: 'please enter all' });
+    return res.status(400).json({ msg: 'Please Enter All' });
   User.findOne({ email }).then((user) => {
-    if (!user) return res.status(400).json({ msg: 'doent exist' });
+    if (!user) return res.status(400).json({ msg: 'Doesnt exist' });
     bcrypt.compare(password, user.password).then((isMatch) => {
-      if (!isMatch) return res.status(400).json({ msg: 'invalid creds' });
+      if (!isMatch) return res.status(400).json({ msg: 'Invalid Creds' });
       jwt.sign(
         { id: user.id },
         config.get('jwtSecret'),
