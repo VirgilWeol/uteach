@@ -11,6 +11,7 @@ export default function PageHistory() {
   const [search, setSearch] = useState('');
   const [selectedOrder, setSelectedOrder] = useState('');
   const [rating, setRating] = useState(0);
+  const [feedback, setFeedback] = useState('');
   const feedbackModalRef = useRef(null);
 
   useEffect(() => {
@@ -37,7 +38,11 @@ export default function PageHistory() {
   const handleFeedback = (e) => {
     e.preventDefault();
     dispatch(
-      updateOrder(selectedOrder, { status: 'Finished', rating: rating })
+      updateOrder(selectedOrder, {
+        status: 'Finished',
+        rating: rating,
+        feedback: feedback
+      })
     );
     feedbackModalRef.current.close();
   };
@@ -65,6 +70,19 @@ export default function PageHistory() {
                   count={5}
                   rating={rating}
                   onRatingChange={setRating}
+                />
+              </div>
+              {/* desc input */}
+              <div>
+                <label htmlFor='feedback'>Feedback</label>
+                <textarea
+                  name='feedback'
+                  id='feedback'
+                  cols='30'
+                  rows='10'
+                  className='w-full p-2 bg-transparent border rounded-md border-slate-200'
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
                 />
               </div>
               <button
@@ -172,7 +190,9 @@ export default function PageHistory() {
                   <button
                     className='px-12 py-2 mt-4 text-white bg-blue-500 rounded-md '
                     onClick={() =>
-                      dispatch(updateOrder(order._id, { status: 'Finished' }))
+                      dispatch(
+                        updateOrder(order._id, { status: 'Give Feedback' })
+                      )
                     }>
                     End Session
                   </button>

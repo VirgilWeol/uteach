@@ -63,42 +63,45 @@ router.put('/:_id', auth, async function (req, res) {
   try {
     const order = await Order.findById(req.params._id);
 
+    if (!order) {
+      return res.status(404).json({ success: false, error: 'Order not found' });
+    }
+
+    // Update order fields
     for (const field in req.body) {
       order[field] = req.body[field];
     }
-    order.save();
-    // .then((updatedOrder) => res.json(updatedOrder))
-    // .catch((err) => res.status(400).json({ success: false, error: err }));
+
+    await order.save();
 
     if (req.body.rating) {
       const mentorId = order.mentorId;
 
-      // Fetch orders related to the mentor
-      const orders = await Order.find({ mentorId: mentorId });
-
-      if (orders.length === 0) {
-        return null;
-      }
+      // Fetch orders related to the mentor, excluding the current order
+      const orders = await Order.find({
+        mentorId: mentorId,
+        _id: { $ne: order._id }
+      });
 
       const totalRating = orders.reduce(
         (sum, order) => sum + (order.rating || 0),
         0
       );
-      const newAverageRating = totalRating / orders.length;
+      const newAverageRating =
+        (totalRating + req.body.rating) / (orders.length + 1);
 
+      // Update rating in the related Item
       const updatedItem = await Item.findOneAndUpdate(
         { mentorId: mentorId },
         { rating: newAverageRating },
         { new: true }
-      )
-        .then((item) => item)
-        .catch((err) => {
-          console.error('Error updating item:', err);
-          return null;
-        });
+      );
 
       if (!updatedItem) {
-        return null;
+        console.error('Error updating item');
+        return res
+          .status(500)
+          .json({ success: false, error: 'Error updating item rating' });
       }
     }
 

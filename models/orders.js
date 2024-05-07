@@ -39,6 +39,11 @@ const OrderSchema = new schema({
     required: true,
     default: 0
   },
+  feedback: {
+    type: String,
+    required: true,
+    default: 'No feedback yet'
+  },
   description: {
     type: String,
     required: true
